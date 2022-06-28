@@ -42,4 +42,5 @@ jobs:
           RABBITMQ_HOST: rabbitmq
         run: |
           ls
-          python3 github-action-testing/test_rabbitmq.py
+          pwd
+          python3 test_rabbitmq.py
