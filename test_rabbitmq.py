@@ -10,40 +10,51 @@ def main():
     
     print(f"RABBITMQ_HOST: {host}")
     
-    credentials = pika.credentials.PlainCredentials(username, password)
-    publish(credentials, host, vhost)
-    consume(credentials, host, vhost)
+    queue_name = "test_queue_name"
+    exchange_name = "amq.topic"
+    routing_key = "test_routing_key"
     
-def publish(credentials, host, vhost):
+    credentials = pika.credentials.PlainCredentials(username, password)
+    publish(host, vhost, credentials, exchange_name, routing_key, queue_name)
+    consume(host, vhost, credentials, exchange_name, routing_key, queue_name)
+
+    
+def publish(host, vhost, credentials, exchange_name, routing_key, queue_name):
     connection = pika.BlockingConnection(pika.ConnectionParameters(
         host=host,
         virtual_host=vhost,
         credentials=credentials))
     channel = connection.channel()
 
-    channel.basic_publish(
-        'test_exchange',
-        'test_routing_key',
-        'message body value',
-        pika.BasicProperties(content_type='text/plain',
-        delivery_mode=pika.DeliveryMode.Transient))
-    connection.close()
+    channel.publish(
+        exchange=exchange_name, routing_key=routing_key, body="message body value"
+    )
 
-def consume(credentials, host, vhost):
+
+def consume(host, vhost, credentials, exchange_name, routing_key, queue_name):
     connection = pika.BlockingConnection(pika.ConnectionParameters(
         host=host,
         virtual_host=vhost,
         credentials=credentials))
     channel = connection.channel()
     print(channel)
-    method_frame, header_frame, body = channel.basic_get("test")
+    try:
+        channel.queue_declare(queue=queue_name, passive=True)
+    except pika.exceptions.ChannelClosed:
+        channel = connection.channel()
+        channel.queue_declare(queue=queue_name)
+    channel.queue_bind(queue_name, exchange_name, routing_key=routing_key)
+
+    method_frame, header_frame, body = channel.basic_get(queue_name)
     if method_frame:
+        print("received message")
         print(method_frame, header_frame, body)
         channel.basic_ack(method_frame.delivery_tag)
     else:
         print("No message returned")
-    
+        
     connection.close()
+
 
 if __name__ == "__main__":
     main()
