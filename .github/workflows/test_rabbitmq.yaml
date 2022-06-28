@@ -45,3 +45,4 @@ jobs:
           ls
           pwd
           python3 test_rabbitmq.py
+          python3 test_aio_pika.py
