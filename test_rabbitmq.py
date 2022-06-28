@@ -1,8 +1,10 @@
 import pika
 from os import environ
-
+import platform
     
 def main():
+    print(f"Python version: {platform.python_version()}")
+
     username = "guest"
     password = "guest"
     host = environ.get("RABBITMQ_HOST")
@@ -25,6 +27,7 @@ def publish(host, vhost, credentials, exchange_name, routing_key, queue_name):
         virtual_host=vhost,
         credentials=credentials))
     channel = connection.channel()
+    print(channel)
 
     channel.publish(
         exchange=exchange_name, routing_key=routing_key, body="message body value"
