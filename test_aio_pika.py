@@ -26,6 +26,9 @@ async def simple_consumer() -> None:
     async with connection:
         # Creating channel
         channel = await connection.channel()
+        
+        print(f"connection: {connection}")
+        print(f"channel: {channel}")
 
         # Will take no more than 10 messages in advance
         await channel.set_qos(prefetch_count=10)
@@ -90,7 +93,8 @@ async def send_and_get() -> None:
     # Creating channel
     channel = await connection.channel()
     
-    print(channel)
+    print(f"connection: {connection}")
+    print(f"channel: {channel}")
 
     # Declaring exchange
     exchange = await channel.declare_exchange("direct", auto_delete=True)

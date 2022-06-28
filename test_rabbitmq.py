@@ -27,7 +27,9 @@ def publish(host, vhost, credentials, exchange_name, routing_key, queue_name):
         virtual_host=vhost,
         credentials=credentials))
     channel = connection.channel()
-    print(channel)
+    
+    print(f"connection: {connection}")
+    print(f"channel: {channel}")
 
     channel.publish(
         exchange=exchange_name, routing_key=routing_key, body="message body value"
@@ -40,7 +42,10 @@ def consume(host, vhost, credentials, exchange_name, routing_key, queue_name):
         virtual_host=vhost,
         credentials=credentials))
     channel = connection.channel()
-    print(channel)
+    
+    print(f"connection: {connection}")
+    print(f"channel: {channel}")
+    
     try:
         channel.queue_declare(queue=queue_name, passive=True)
     except pika.exceptions.ChannelClosed:
