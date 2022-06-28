@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-20.04 
     # Docker Hub image that `container-job` executes in
     container:
-      image: ros:noetic-ros-core
+      image: osrf/ros:noetic-desktop-full
     defaults:
       run:
         shell: bash
