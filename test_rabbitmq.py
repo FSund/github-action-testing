@@ -2,7 +2,7 @@ import pika
 from os import environ
 
     
-def main()
+def main():
     username = "guest"
     password = "guest"
     host = environ.get("RABBITMQ_HOST")
