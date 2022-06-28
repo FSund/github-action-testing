@@ -21,9 +21,6 @@ jobs:
       rabbitmq:
         # Docker Hub image
         image: rabbitmq:3
-        # port mapping not required as long as job runs in container (instead of on host)
-        ports:
-          - 5672:5672
         # needed because the rabbitmq container does not provide a healthcheck
         options: >-
           --health-cmd "rabbitmqctl node_health_check"
