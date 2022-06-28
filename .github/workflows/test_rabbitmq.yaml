@@ -33,8 +33,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3-pika
+          sudo pip3 install pika==0.11.0
       - name: Checkout
         uses: actions/checkout@v3
       - name: Run tests
